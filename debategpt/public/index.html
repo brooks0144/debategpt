@@ -5,67 +5,33 @@
   <title>DebateGPT – Reply Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      margin: 0; padding: 0; min-height: 100vh;
+      display: flex; justify-content: center; align-items: flex-start;
       background:
         radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
         radial-gradient(circle at bottom right, #0ea5e9 0, transparent 55%),
         #020617;
       color: #e5e7eb;
     }
-
-    .app {
-      width: 100%;
-      max-width: 900px;
-      padding: 32px 16px 48px;
-    }
-
-    h1 {
-      margin-top: 0;
-      font-size: 2rem;
-      text-align: center;
-      letter-spacing: 0.05em;
-    }
-
-    p.subtitle {
-      text-align: center;
-      margin-top: 6px;
-      color: #94a3b8;
-      font-size: 0.96rem;
-    }
+    .app { width: 100%; max-width: 900px; padding: 32px 16px 48px; }
+    h1 { margin-top: 0; font-size: 2rem; text-align: center; letter-spacing: 0.05em; }
+    p.subtitle { text-align: center; margin-top: 6px; color: #94a3b8; font-size: 0.96rem; }
 
     .card {
       background: rgba(15, 23, 42, 0.95);
       border-radius: 18px;
       padding: 18px 16px;
       border: 1px solid #1e293b;
-      box-shadow:
-        0 18px 45px rgba(15, 23, 42, 0.85),
-        0 0 0 1px rgba(15, 23, 42, 0.7);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85), 0 0 0 1px rgba(15, 23, 42, 0.7);
       margin-top: 18px;
       backdrop-filter: blur(10px);
     }
 
-    label {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 6px;
-      color: #cbd5f5;
-    }
+    label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: #cbd5f5; }
 
-    textarea,
-    select,
-    input[type="text"] {
+    textarea, select, input[type="text"] {
       width: 100%;
       border-radius: 10px;
       border: 1px solid #1f2937;
@@ -76,29 +42,14 @@
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-
-    textarea:focus,
-    select:focus,
-    input[type="text"]:focus {
+    textarea:focus, select:focus, input[type="text"]:focus {
       border-color: #3b82f6;
       box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.45);
     }
+    textarea { min-height: 110px; resize: vertical; }
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .row .field {
-      flex: 1 1 160px;
-    }
+    .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+    .row .field { flex: 1 1 160px; }
 
     button {
       margin-top: 18px;
@@ -114,36 +65,13 @@
       box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
       transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.2s;
     }
+    button:hover { transform: translateY(-1px); box-shadow: 0 18px 40px rgba(37, 99, 235, 0.75); opacity: 0.97; }
+    button:active { transform: translateY(0); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    button:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.75);
-      opacity: 0.97;
-    }
+    .output-title { margin-top: 4px; font-size: 1.1rem; font-weight: 600; }
 
-    button:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .output-title {
-      margin-top: 4px;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    .reply-list {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
+    .reply-list { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
     .reply-card {
       background: #020617;
       border-radius: 12px;
@@ -153,27 +81,15 @@
       flex-direction: column;
       gap: 6px;
     }
-
     .reply-label {
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #64748b;
     }
+    .reply-text { font-size: 0.95rem; line-height: 1.45; white-space: pre-wrap; color: #e5e7eb; }
 
-    .reply-text {
-      font-size: 0.95rem;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      color: #e5e7eb;
-    }
-
-    .reply-actions {
-      margin-top: 4px;
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-    }
+    .reply-actions { margin-top: 4px; display: flex; gap: 8px; justify-content: flex-end; }
 
     .small-btn {
       font-size: 0.78rem;
@@ -184,28 +100,17 @@
       color: #e5e7eb;
       cursor: pointer;
       transition: border-color 0.15s ease, background 0.15s ease;
+      width: auto;
+      margin-top: 0;
+      box-shadow: none;
     }
+    .small-btn:hover { border-color: #38bdf8; background: #020818; }
 
-    .small-btn:hover {
-      border-color: #38bdf8;
-      background: #020818;
-    }
-
-    .status {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #94a3b8;
-      min-height: 1.2em;
-    }
+    .status { margin-top: 8px; font-size: 0.85rem; color: #94a3b8; min-height: 1.2em; }
 
     @media (max-width: 600px) {
-      .card {
-        padding: 14px 12px;
-      }
-
-      h1 {
-        font-size: 1.6rem;
-      }
+      .card { padding: 14px 12px; }
+      h1 { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -283,7 +188,7 @@
           <input type="text" id="extra-input" placeholder="e.g. Make it more stoic and clever, not whiny." />
         </div>
 
-        <button type="submit">Generate Replies</button>
+        <button id="generate-btn" type="submit">Generate Replies</button>
         <div id="status" class="status"></div>
       </form>
     </div>
@@ -328,7 +233,7 @@
           <input type="text" id="hook-extra" placeholder="e.g. Aim for maximum curiosity in 15 words or less." />
         </div>
 
-        <button type="submit">Generate Hooks</button>
+        <button id="hook-btn" type="submit">Generate Hooks</button>
         <div id="hook-status" class="status"></div>
       </form>
 
@@ -337,259 +242,234 @@
   </div>
 
   <script>
-  const form = document.getElementById("debategpt-form");
-  const statusEl = document.getElementById("status");
-  const replyList = document.getElementById("reply-list");
-  const copyAllBtn = document.getElementById("copy-all-btn");
+    const form = document.getElementById("debategpt-form");
+    const statusEl = document.getElementById("status");
+    const replyList = document.getElementById("reply-list");
+    const copyAllBtn = document.getElementById("copy-all-btn");
+    const generateBtn = document.getElementById("generate-btn");
 
-  const hookForm = document.getElementById("hook-form");
-  const hookStatusEl = document.getElementById("hook-status");
-  const hookList = document.getElementById("hook-list");
+    const hookForm = document.getElementById("hook-form");
+    const hookStatusEl = document.getElementById("hook-status");
+    const hookList = document.getElementById("hook-list");
+    const hookBtn = document.getElementById("hook-btn");
 
-  function tempStatus(el, msg, delay = 3000) {
-    el.textContent = msg;
-    setTimeout(() => {
-      if (el.textContent === msg) el.textContent = "";
-    }, delay);
-  }
-
-  // Call our secure backend API
-  async function callBackend(kind, payload) {
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind, payload })
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'API error');
+    function tempStatus(el, msg, delay = 3000) {
+      el.textContent = msg;
+      setTimeout(() => {
+        if (el.textContent === msg) el.textContent = "";
+      }, delay);
     }
 
-    const data = await response.json();
-    return data.content;
-  }
+    // Call our secure backend API (throws on 4xx/5xx)
+    async function callBackend(kind, payload) {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind, payload })
+      });
 
-  async function generateReplies(tweetText, tone, angle, length, count, extra) {
-    const replies = [];
-    
-    // Generate each reply independently for maximum variety
-    for (let i = 0; i < count; i++) {
-      try {
-        const content = await callBackend('replies', {
-          tweet_text: tweetText,
-          tone,
-          angle,
-          length,
-          num_replies: 1,
-          extra_instructions: extra || ''
-        });
-        
-        replies.push({
-          label: `Option ${i + 1} • ${tone} + ${angle}`,
-          content: content
-        });
-        
-        // Show progress
-        statusEl.textContent = `Generating replies... (${i + 1}/${count})`;
-      } catch (err) {
-        console.error(`Error generating reply ${i + 1}:`, err);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Request failed');
       }
-    }
-    
-    return replies;
-  }
 
-  async function generateHooks(topic, tone, count, extra) {
-    const hooks = [];
-    
-    for (let i = 0; i < count; i++) {
-      try {
-        const content = await callBackend('hooks', {
-          topic,
-          tone,
-          num_hooks: 1,
-          extra_instructions: extra || ''
-        });
-        
-        hooks.push({ content });
-        
-        hookStatusEl.textContent = `Generating hooks... (${i + 1}/${count})`;
-      } catch (err) {
-        console.error(`Error generating hook ${i + 1}:`, err);
+      return data;
+    }
+
+    // ONE call per click (so rate limit behaves)
+    async function generateReplies(tweetText, tone, angle, length, count, extra) {
+      const data = await callBackend('replies', {
+        tweet_text: tweetText,
+        tone,
+        angle,
+        length,
+        num_replies: Number(count),
+        extra_instructions: extra || ''
+      });
+
+      return (data?.replies || []).map((r, i) => ({
+        label: `Option ${i + 1} • ${tone} + ${angle}`,
+        content: r?.content || ""
+      })).filter(r => r.content.trim());
+    }
+
+    async function generateHooks(topic, tone, count, extra) {
+      const data = await callBackend('hooks', {
+        topic,
+        tone,
+        num_hooks: Number(count),
+        extra_instructions: extra || ''
+      });
+
+      return (data?.hooks || []).map((h) => ({
+        content: h?.content || ""
+      })).filter(h => h.content.trim());
+    }
+
+    // UI handlers
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const tweetText = document.getElementById("tweet-input").value.trim();
+      let mode = document.getElementById("mode-select").value;
+      let tone = document.getElementById("tone-select").value;
+      let angle = document.getElementById("angle-select").value;
+      let length = document.getElementById("length-select").value;
+      const count = document.getElementById("count-select").value;
+      let extra = document.getElementById("extra-input").value.trim();
+
+      if (mode !== "custom") {
+        switch (mode) {
+          case "clapback":
+            tone = "spicy"; angle = "disagree";
+            extra = extra || "Sharp, confident. No childish insults.";
+            break;
+          case "stoic":
+            tone = "stoic";
+            extra = extra || "Calm, principle-based, no emotion.";
+            break;
+          case "analyst":
+            tone = "calm"; angle = "question";
+            extra = extra || "Break it down logically.";
+            break;
+          case "polite":
+            tone = "calm";
+            extra = extra || "Respectful but firm.";
+            break;
+          case "thread":
+            tone = "thread-style"; length = "thread";
+            extra = extra || "Mini-thread, clean and punchy.";
+            break;
+        }
       }
-    }
-    
-    return hooks;
-  }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const tweetText = document.getElementById("tweet-input").value.trim();
-    let mode = document.getElementById("mode-select").value;
-    let tone = document.getElementById("tone-select").value;
-    let angle = document.getElementById("angle-select").value;
-    let length = document.getElementById("length-select").value;
-    const count = document.getElementById("count-select").value;
-    let extra = document.getElementById("extra-input").value.trim();
-
-    if (mode !== "custom") {
-      switch (mode) {
-        case "clapback":
-          tone = "spicy"; angle = "disagree";
-          extra = extra || "Sharp, confident. No childish insults.";
-          break;
-        case "stoic":
-          tone = "stoic";
-          extra = extra || "Calm, principle-based, no emotion.";
-          break;
-        case "analyst":
-          tone = "calm"; angle = "question";
-          extra = extra || "Break it down logically.";
-          break;
-        case "polite":
-          tone = "calm";
-          extra = extra || "Respectful but firm.";
-          break;
-        case "thread":
-          tone = "thread-style"; length = "thread";
-          extra = extra || "Mini-thread, clean and punchy.";
-          break;
-      }
-    }
-
-    if (!tweetText) {
-      tempStatus(statusEl, "Please paste a tweet first.", 4000);
-      return;
-    }
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    statusEl.textContent = "Generating replies...";
-    replyList.innerHTML = "";
-
-    try {
-      const replies = await generateReplies(tweetText, tone, angle, length, count, extra);
-      if (!replies.length) {
-        statusEl.textContent = "No replies returned. Try again.";
+      if (!tweetText) {
+        tempStatus(statusEl, "Please paste a tweet first.", 4000);
         return;
       }
-      showReplies(replies);
-      tempStatus(statusEl, `Generated ${replies.length} replies.`, 3500);
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = "Error: " + (err.message || "Unknown");
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
 
-  hookForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      statusEl.textContent = "Generating replies...";
+      replyList.innerHTML = "";
+      generateBtn.disabled = true;
 
-    const topic = document.getElementById("hook-topic").value.trim();
-    const tone = document.getElementById("hook-tone").value;
-    const count = document.getElementById("hook-count").value;
-    const extra = document.getElementById("hook-extra").value.trim();
-
-    if (!topic) {
-      tempStatus(hookStatusEl, "Please describe a topic.", 3500);
-      return;
-    }
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    hookStatusEl.textContent = "Generating hooks...";
-    hookList.innerHTML = "";
-
-    try {
-      const hooks = await generateHooks(topic, tone, count, extra);
-      showHooks(hooks);
-      tempStatus(hookStatusEl, `Generated ${hooks.length} hooks.`, 3500);
-    } catch (err) {
-      console.error(err);
-      hookStatusEl.textContent = "Error: " + (err.message || "Unknown");
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-
-  function showReplies(replies) {
-    replyList.innerHTML = "";
-    replies.forEach((reply) => {
-      const card = document.createElement("div");
-      card.className = "reply-card";
-
-      const label = document.createElement("div");
-      label.className = "reply-label";
-      label.textContent = reply.label || "Reply";
-
-      const text = document.createElement("div");
-      text.className = "reply-text";
-      text.textContent = reply.content;
-
-      const actions = document.createElement("div");
-      actions.className = "reply-actions";
-
-      const copyBtn = document.createElement("button");
-      copyBtn.className = "small-btn";
-      copyBtn.type = "button";
-      copyBtn.textContent = "Copy";
-      copyBtn.onclick = () => {
-        navigator.clipboard.writeText(reply.content);
-        tempStatus(statusEl, "Copied one reply!", 1800);
-      };
-
-      actions.appendChild(copyBtn);
-      card.append(label, text, actions);
-      replyList.appendChild(card);
+      try {
+        const replies = await generateReplies(tweetText, tone, angle, length, count, extra);
+        if (!replies.length) {
+          statusEl.textContent = "No replies returned. Try again.";
+          return;
+        }
+        showReplies(replies);
+        tempStatus(statusEl, `Generated ${replies.length} replies.`, 3500);
+      } catch (err) {
+        statusEl.textContent = err.message; // shows 429 daily cap message
+      } finally {
+        generateBtn.disabled = false;
+      }
     });
-  }
 
-  function showHooks(hooks) {
-    hookList.innerHTML = "";
-    hooks.forEach((hook, i) => {
-      const card = document.createElement("div");
-      card.className = "reply-card";
+    hookForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-      const label = document.createElement("div");
-      label.className = "reply-label";
-      label.textContent = `Hook ${i + 1}`;
+      const topic = document.getElementById("hook-topic").value.trim();
+      const tone = document.getElementById("hook-tone").value;
+      const count = document.getElementById("hook-count").value;
+      const extra = document.getElementById("hook-extra").value.trim();
 
-      const text = document.createElement("div");
-      text.className = "reply-text";
-      text.textContent = hook.content;
+      if (!topic) {
+        tempStatus(hookStatusEl, "Please describe a topic.", 3500);
+        return;
+      }
 
-      const actions = document.createElement("div");
-      actions.className = "reply-actions";
+      hookStatusEl.textContent = "Generating hooks...";
+      hookList.innerHTML = "";
+      hookBtn.disabled = true;
 
-      const copyBtn = document.createElement("button");
-      copyBtn.className = "small-btn";
-      copyBtn.type = "button";
-      copyBtn.textContent = "Copy";
-      copyBtn.onclick = () => {
-        navigator.clipboard.writeText(hook.content);
-        tempStatus(hookStatusEl, "Hook copied!", 1800);
-      };
-
-      actions.appendChild(copyBtn);
-      card.append(label, text, actions);
-      hookList.appendChild(card);
+      try {
+        const hooks = await generateHooks(topic, tone, count, extra);
+        showHooks(hooks);
+        tempStatus(hookStatusEl, `Generated ${hooks.length} hooks.`, 3500);
+      } catch (err) {
+        hookStatusEl.textContent = err.message;
+      } finally {
+        hookBtn.disabled = false;
+      }
     });
-  }
 
-  copyAllBtn.addEventListener("click", () => {
-    const texts = [...document.querySelectorAll("#reply-list .reply-text")].map(el => el.textContent);
-    if (!texts.length) {
-      tempStatus(statusEl, "No replies to copy yet.", 2500);
-      return;
+    function showReplies(replies) {
+      replyList.innerHTML = "";
+      replies.forEach((reply) => {
+        const card = document.createElement("div");
+        card.className = "reply-card";
+
+        const label = document.createElement("div");
+        label.className = "reply-label";
+        label.textContent = reply.label || "Reply";
+
+        const text = document.createElement("div");
+        text.className = "reply-text";
+        text.textContent = reply.content;
+
+        const actions = document.createElement("div");
+        actions.className = "reply-actions";
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "small-btn";
+        copyBtn.type = "button";
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(reply.content);
+          tempStatus(statusEl, "Copied one reply!", 1800);
+        };
+
+        actions.appendChild(copyBtn);
+        card.append(label, text, actions);
+        replyList.appendChild(card);
+      });
     }
-    const combined = texts.map((t, i) => `${i + 1}. ${t}`).join("\n\n");
-    navigator.clipboard.writeText(combined);
-    tempStatus(statusEl, "All replies copied!", 2500);
-  });
-</script>
 
+    function showHooks(hooks) {
+      hookList.innerHTML = "";
+      hooks.forEach((hook, i) => {
+        const card = document.createElement("div");
+        card.className = "reply-card";
+
+        const label = document.createElement("div");
+        label.className = "reply-label";
+        label.textContent = `Hook ${i + 1}`;
+
+        const text = document.createElement("div");
+        text.className = "reply-text";
+        text.textContent = hook.content;
+
+        const actions = document.createElement("div");
+        actions.className = "reply-actions";
+
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "small-btn";
+        copyBtn.type = "button";
+        copyBtn.textContent = "Copy";
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(hook.content);
+          tempStatus(hookStatusEl, "Hook copied!", 1800);
+        };
+
+        actions.appendChild(copyBtn);
+        card.append(label, text, actions);
+        hookList.appendChild(card);
+      });
+    }
+
+    copyAllBtn.addEventListener("click", () => {
+      const texts = [...document.querySelectorAll("#reply-list .reply-text")].map(el => el.textContent);
+      if (!texts.length) {
+        tempStatus(statusEl, "No replies to copy yet.", 2500);
+        return;
+      }
+      const combined = texts.map((t, i) => `${i + 1}. ${t}`).join("\n\n");
+      navigator.clipboard.writeText(combined);
+      tempStatus(statusEl, "All replies copied!", 2500);
+    });
+  </script>
 </body>
 </html>
